@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listagem de Clientes</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Clientes</h1>
+    <a class="btn btn-primary mb-3" th:href="@{/clientes/novo}">Novo Cliente</a>
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>CPF</th>
+            <th>Telefone</th>
+            <th>Cidade/UF</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cliente : ${clientes}">
+            <td th:text="${cliente.nomeCompleto}"></td>
+            <td th:text="${cliente.email}"></td>
+            <td th:text="${cliente.cpf}"></td>
+            <td th:text="${cliente.telefone}"></td>
+            <td th:text="${cliente.endereco.cidade} + '/' + ${cliente.endereco.uf}"></td>
+            <td>
+                <a class="btn btn-sm btn-warning" th:href="@{/clientes/edit/{id}(id=${cliente.id})}">Editar</a>
+                <a class="btn btn-sm btn-danger" th:href="@{/clientes/delete/{id}(id=${cliente.id})}">Excluir</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

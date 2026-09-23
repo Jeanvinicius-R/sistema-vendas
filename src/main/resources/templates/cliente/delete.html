@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Excluir Cliente</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Excluir Cliente</h1>
+
+    <div class="alert alert-danger">
+        <p>Tem certeza que deseja excluir o cliente <strong th:text="${cliente.nomeCompleto}"></strong>?</p>
+    </div>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>Nome</th>
+            <td th:text="${cliente.nomeCompleto}"></td>
+        </tr>
+        <tr>
+            <th>E-mail</th>
+            <td th:text="${cliente.email}"></td>
+        </tr>
+        <tr>
+            <th>CPF</th>
+            <td th:text="${cliente.cpf}"></td>
+        </tr>
+        <tr>
+            <th>Telefone</th>
+            <td th:text="${cliente.telefone}"></td>
+        </tr>
+        <tr>
+            <th>Endereço</th>
+            <td th:text="${cliente.endereco.logradouro} + ', ' + ${cliente.endereco.numero} + ' - ' + ${cliente.endereco.bairro} + ' - ' + ${cliente.endereco.cidade} + '/' + ${cliente.endereco.uf} + ' - ' + ${cliente.endereco.cep}"></td>
+        </tr>
+    </table>
+
+    <form th:action="@{/clientes/delete/{id}(id=${cliente.id})}" method="post">
+        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+        <a th:href="@{/clientes}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

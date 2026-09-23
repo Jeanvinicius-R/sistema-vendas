@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:unless="${cliente.id == null}">Edição de Cliente</title>
+    <title th:if="${cliente.id == null}">Cadastro de Cliente</title>
+
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5 mb-5">
+    <h2 th:text="${cliente.id == null} ? 'Novo Cliente' : 'Editar Cliente'"></h2>
+    <form th:action="@{${cliente.id == null} ? '/clientes/novo' : '/clientes/edit/' + ${cliente.id}}" th:object="${cliente}" method="post">
+
+        <h5 class="mt-4">Dados pessoais</h5>
+
+        <div class="mb-3">
+            <label for="nomeCompleto" class="form-label">Nome completo</label>
+            <input type="text" class="form-control" id="nomeCompleto" th:field="*{nomeCompleto}">
+            <div class="text-danger" th:if="${#fields.hasErrors('nomeCompleto')}" th:errors="*{nomeCompleto}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">E-mail</label>
+            <input type="email" class="form-control" id="email" th:field="*{email}">
+            <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="cpf" class="form-label">CPF</label>
+            <input type="text" class="form-control" id="cpf" th:field="*{cpf}" placeholder="000.000.000-00">
+            <div class="text-danger" th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="telefone" class="form-label">Telefone</label>
+            <input type="text" class="form-control" id="telefone" th:field="*{telefone}" placeholder="(00) 00000-0000">
+            <div class="text-danger" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></div>
+        </div>
+
+        <h5 class="mt-4">Endereço</h5>
+
+        <div class="mb-3">
+            <label for="logradouro" class="form-label">Logradouro</label>
+            <input type="text" class="form-control" id="logradouro" th:field="*{endereco.logradouro}">
+            <div class="text-danger" th:if="${#fields.hasErrors('endereco.logradouro')}" th:errors="*{endereco.logradouro}"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="numero" class="form-label">Número <small class="text-muted">(opcional)</small></label>
+                <input type="text" class="form-control" id="numero" th:field="*{endereco.numero}">
+                <div class="text-danger" th:if="${#fields.hasErrors('endereco.numero')}" th:errors="*{endereco.numero}"></div>
+            </div>
+            <div class="col-md-8 mb-3">
+                <label for="complemento" class="form-label">Complemento <small class="text-muted">(opcional)</small></label>
+                <input type="text" class="form-control" id="complemento" th:field="*{endereco.complemento}">
+                <div class="text-danger" th:if="${#fields.hasErrors('endereco.complemento')}" th:errors="*{endereco.complemento}"></div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="bairro" class="form-label">Bairro</label>
+            <input type="text" class="form-control" id="bairro" th:field="*{endereco.bairro}">
+            <div class="text-danger" th:if="${#fields.hasErrors('endereco.bairro')}" th:errors="*{endereco.bairro}"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="cidade" class="form-label">Cidade</label>
+                <input type="text" class="form-control" id="cidade" th:field="*{endereco.cidade}">
+                <div class="text-danger" th:if="${#fields.hasErrors('endereco.cidade')}" th:errors="*{endereco.cidade}"></div>
+            </div>
+            <div class="col-md-2 mb-3">
+                <label for="uf" class="form-label">UF</label>
+                <input type="text" class="form-control" id="uf" th:field="*{endereco.uf}" maxlength="2">
+                <div class="text-danger" th:if="${#fields.hasErrors('endereco.uf')}" th:errors="*{endereco.uf}"></div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="cep" class="form-label">CEP</label>
+                <input type="text" class="form-control" id="cep" th:field="*{endereco.cep}" placeholder="00000-000">
+                <div class="text-danger" th:if="${#fields.hasErrors('endereco.cep')}" th:errors="*{endereco.cep}"></div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a th:href="@{/clientes}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>
