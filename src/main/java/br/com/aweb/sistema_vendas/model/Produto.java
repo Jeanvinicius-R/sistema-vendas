@@ -8,10 +8,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,13 +37,22 @@ public class Produto {
     @Column(nullable = false, length = 255)
     private String descricao;
 
-    @NotNull(message = "Preço é obrigatório.")
-    @Positive(message = "O valor deve ser maior que zero.")
-    @Column(nullable = false)
+    @NotNull(message = "Preço é obrigatório")
+    @Positive(message = "O valor deve ser maior que zero")
+    @Column(
+        nullable = false,
+        precision = 10,
+        scale = 2
+    )
     private BigDecimal preco;
 
-    @NotNull(message = "Quantidade é obrigatório.")
-    @PositiveOrZero(message = "O valor deve ser maior ou igual a zero.")
+    @NotNull(message = "Quantidade é obrigatória")
+    @PositiveOrZero(
+        message = "O valor deve ser maior ou igual a zero"
+    )
+    @Column(nullable = false)
     private Integer quantidadeEmEstoque;
-    
+
+    @Version
+    private Long version;
 }

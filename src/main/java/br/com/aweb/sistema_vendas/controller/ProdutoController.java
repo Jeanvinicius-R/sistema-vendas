@@ -2,7 +2,6 @@ package br.com.aweb.sistema_vendas.controller;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -21,67 +20,118 @@ import jakarta.validation.Valid;
 @RequestMapping("/produtos")
 public class ProdutoController {
 
-    @Autowired
-    private ProdutoService produtoService;
+    private final ProdutoService produtoService;
 
-    // Listar produtos
+    public ProdutoController(ProdutoService produtoService) {
+        this.produtoService = produtoService;
+    }
+
     @GetMapping
     public ModelAndView list() {
-        return new ModelAndView("produto/list", Map.of("produtos", produtoService.listarTodos()));
+
+        return new ModelAndView(
+            "produto/list",
+            Map.of(
+                "produtos",
+                produtoService.listarTodos()
+            )
+        );
     }
 
-    // Formulário de cadastro
     @GetMapping("/novo")
     public ModelAndView create() {
-        return new ModelAndView("produto/form", Map.of("produto", new Produto()));
+
+        return new ModelAndView(
+            "produto/form",
+            Map.of(
+                "produto",
+                new Produto()
+            )
+        );
     }
 
-    // Salvar produto
     @PostMapping("/novo")
-    public String create(@Valid Produto produto, BindingResult result) {
+    public String create(
+            @Valid Produto produto,
+            BindingResult result) {
+
         if (result.hasErrors()) {
             return "produto/form";
         }
+
         produtoService.salvar(produto);
+
         return "redirect:/produtos";
     }
 
-    // Formulário de edição
     @GetMapping("/edit/{id}")
-    public ModelAndView edit(@PathVariable Long id) {
-        var optionalProduto = produtoService.buscarPorId(id);
-        if (optionalProduto.isPresent()) {
-            return new ModelAndView("produto/form", Map.of("produto", optionalProduto.get()));
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    public ModelAndView edit(
+            @PathVariable Long id) {
+
+        var produto = produtoService
+                .buscarPorId(id)
+                .orElseThrow(() ->
+                    new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Produto não encontrado."
+                    )
+                );
+
+        return new ModelAndView(
+            "produto/form",
+            Map.of(
+                "produto",
+                produto
+            )
+        );
     }
 
-    // Atualizar produto
     @PostMapping("/edit/{id}")
-    public String edit(@Valid Produto produto, BindingResult result) {
+    public String edit(
+            @PathVariable Long id,
+            @Valid Produto produto,
+            BindingResult result) {
+
         if (result.hasErrors()) {
             return "produto/form";
         }
 
-        produtoService.atualizar(produto.getId(), produto);
+        produtoService.atualizar(
+            id,
+            produto
+        );
 
         return "redirect:/produtos";
     }
 
-    // Excluir produto
     @GetMapping("/delete/{id}")
-    public ModelAndView delete(@PathVariable Long id) {
-        var optionalProduto = produtoService.buscarPorId(id);
-        if (optionalProduto.isPresent()) {
-            return new ModelAndView("produto/delete", Map.of("produto", optionalProduto.get()));
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    public ModelAndView deleteForm(
+            @PathVariable Long id) {
+
+        var produto = produtoService
+                .buscarPorId(id)
+                .orElseThrow(() ->
+                    new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Produto não encontrado."
+                    )
+                );
+
+        return new ModelAndView(
+            "produto/delete",
+            Map.of(
+                "produto",
+                produto
+            )
+        );
     }
 
     @PostMapping("/delete/{id}")
-    public String delete(Produto produto) {
-        produtoService.excluir(produto.getId());
+    public String delete(
+            @PathVariable Long id) {
+
+        produtoService.excluir(id);
+
         return "redirect:/produtos";
     }
-
 }

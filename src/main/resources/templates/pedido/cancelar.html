@@ -1,37 +1,85 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Cancelar Pedido</title>
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 </head>
+
 <body>
+
 <div class="container mt-4">
+
     <h1>Cancelar Pedido</h1>
 
     <div class="alert alert-warning">
-        <p>Tem certeza que deseja cancelar o pedido <strong>#<span th:text="${pedido.id}"></span></strong> do cliente
-            <strong th:text="${pedido.cliente.nomeCompleto}"></strong>?</p>
-        <p>Os produtos deste pedido serão devolvidos ao estoque. O registro não será excluído.</p>
+
+        <p>
+            Tem certeza que deseja cancelar o pedido
+            <strong>#<span th:text="${pedido.id}"></span></strong>
+            do cliente
+            <strong th:text="${pedido.cliente.nomeCompleto}"></strong>?
+        </p>
+
+        <p>
+            Os produtos deste pedido serão devolvidos ao estoque.
+            O registro não será excluído.
+        </p>
+
     </div>
 
     <table class="table table-bordered">
+
+        <thead>
         <tr>
             <th>Produto</th>
             <th>Quantidade</th>
         </tr>
+        </thead>
+
+        <tbody>
+
         <tr th:each="item : ${pedido.itens}">
-            <td th:text="${item.produto.nome}"></td>
-            <td th:text="${item.quantidade}"></td>
+
+            <td th:text="${item.produto.nome}">
+                Produto
+            </td>
+
+            <td th:text="${item.quantidade}">
+                1
+            </td>
+
         </tr>
+
+        </tbody>
+
     </table>
 
-    <p><strong>Valor total:</strong> <span th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorTotal, 1, 2)}"></span></p>
+    <p>
+        <strong>Valor total:</strong>
 
-    <form th:action="@{/pedidos/cancelar/{id}(id=${pedido.id})}" method="post">
-        <button type="submit" class="btn btn-danger">Confirmar Cancelamento</button>
-        <a th:href="@{/pedidos}" class="btn btn-secondary">Voltar</a>
+        <span th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorTotal, 1, 2)}">
+            R$ 0,00
+        </span>
+    </p>
+
+    <form th:action="@{/pedidos/cancelar/{id}(id=${pedido.id})}"
+          method="post">
+
+        <button type="submit"
+                class="btn btn-danger">
+            Confirmar Cancelamento
+        </button>
+
+        <a th:href="@{/pedidos}"
+           class="btn btn-secondary">
+            Voltar
+        </a>
+
     </form>
+
 </div>
+
 </body>
 </html>

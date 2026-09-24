@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Pedidos - Sistema de Vendas</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f8;
+        color: #333;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 40px auto;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+
+      h1 {
+        margin: 0;
+        color: #222;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 10px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .btn-primary {
+        background-color: #0d6efd;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background-color: #0b5ed7;
+      }
+
+      .btn-info {
+        background-color: #0dcaf0;
+        color: #000;
+      }
+
+      .btn-warning {
+        background-color: #ffc107;
+        color: #000;
+      }
+
+      .btn-danger {
+        background-color: #dc3545;
+        color: white;
+      }
+
+      .alert {
+        padding: 12px 16px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+      }
+
+      .alert-success {
+        background-color: #d1e7dd;
+        color: #0f5132;
+      }
+
+      .alert-error {
+        background-color: #f8d7da;
+        color: #842029;
+      }
+
+      .card {
+        background-color: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 14px 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #f8f9fa;
+      }
+
+      tr:hover {
+        background-color: #f8f9fa;
+      }
+
+      .status {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .status-ativo {
+        background-color: #d1e7dd;
+        color: #0f5132;
+      }
+
+      .status-cancelado {
+        background-color: #f8d7da;
+        color: #842029;
+      }
+
+      .acoes {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .vazio {
+        text-align: center;
+        padding: 40px;
+        color: #777;
+      }
+
+      .valor {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Pedidos</h1>
+
+        <a th:href="@{/pedidos/novo}" class="btn btn-primary">
+          + Novo Pedido
+        </a>
+      </div>
+
+      <!-- Mensagem de sucesso -->
+      <div
+        th:if="${sucesso}"
+        class="alert alert-success"
+        th:text="${sucesso}"
+      ></div>
+
+      <!-- Mensagem de erro -->
+      <div th:if="${erro}" class="alert alert-error" th:text="${erro}"></div>
+
+      <div class="card">
+        <!-- Quando não existem pedidos -->
+        <div th:if="${#lists.isEmpty(pedidos)}" class="vazio">
+          <h3>Nenhum pedido encontrado</h3>
+
+          <p>Ainda não existem pedidos cadastrados.</p>
+
+          <a th:href="@{/pedidos/novo}" class="btn btn-primary">
+            Criar primeiro pedido
+          </a>
+        </div>
+
+        <!-- Quando existem pedidos -->
+        <table th:unless="${#lists.isEmpty(pedidos)}">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Data</th>
+              <th>Valor Total</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr th:each="pedido : ${pedidos}">
+              <td th:text="${pedido.id}">1</td>
+
+              <td th:text="${pedido.cliente.nomeCompleto}">Cliente</td>
+
+              <td th:text="${pedido.dataPedidoFormatada}">20/09/2026</td>
+
+              <td
+                class="valor"
+                th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorTotal, 1, 2)}"
+              >
+                R$ 0,00
+              </td>
+
+              <td>
+                <span
+                  th:if="${pedido.status.name() == 'ATIVO'}"
+                  class="status status-ativo"
+                >
+                  ATIVO
+                </span>
+
+                <span
+                  th:if="${pedido.status.name() == 'CANCELADO'}"
+                  class="status status-cancelado"
+                >
+                  CANCELADO
+                </span>
+              </td>
+
+              <td>
+                <div class="acoes">
+                  <a
+                    th:href="@{/pedidos/detalhes/{id}(id=${pedido.id})}"
+                    class="btn btn-info"
+                  >
+                    Detalhes
+                  </a>
+
+                  <a
+                    th:if="${pedido.status.name() == 'ATIVO'}"
+                    th:href="@{/pedidos/edit/{id}(id=${pedido.id})}"
+                    class="btn btn-warning"
+                  >
+                    Editar
+                  </a>
+
+                  <a
+                    th:if="${pedido.status.name() == 'ATIVO'}"
+                    th:href="@{/pedidos/cancelar/{id}(id=${pedido.id})}"
+                    class="btn btn-danger"
+                  >
+                    Cancelar
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
