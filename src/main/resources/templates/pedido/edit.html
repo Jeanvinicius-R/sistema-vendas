@@ -197,7 +197,7 @@
                   </td>
 
                   <td
-                    th:text="${'R$ ' + #numbers.formatDecimal(item.precoUnitario.multiply(T(java.math.BigDecimal).valueOf(item.quantidade)), 2, 2)}"
+                    th:text="${'R$ ' + #numbers.formatDecimal(item.precoUnitario.multiply(T(java.math.BigDecimal).valueOf(item.quantidade.longValue())), 2, 2)}"
                   ></td>
 
                   <td>
