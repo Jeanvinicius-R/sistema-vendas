@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -52,6 +53,10 @@ public class Cliente {
     private String email;
 
     @NotBlank(message = "CPF é obrigatório")
+    @Pattern(
+        regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}",
+        message = "CPF deve ter 11 dígitos no formato 000.000.000-00"
+    )
     @CPF(message = "CPF inválido")
     @Column(
         nullable = false,

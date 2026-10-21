@@ -29,7 +29,8 @@
 
         <div class="mb-3">
             <label for="cpf" class="form-label">CPF</label>
-            <input type="text" class="form-control" id="cpf" th:field="*{cpf}" placeholder="000.000.000-00">
+            <input type="text" class="form-control" id="cpf" th:field="*{cpf}" placeholder="000.000.000-00"
+                   maxlength="14" inputmode="numeric" autocomplete="off">
             <div class="text-danger" th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></div>
         </div>
 
@@ -88,5 +89,23 @@
         <a th:href="@{/clientes}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
+
+<script>
+    // Máscara do CPF: aceita só dígitos (máx. 11) e formata como 000.000.000-00
+    const campoCpf = document.getElementById('cpf');
+
+    function formatarCpf(valor) {
+        const d = valor.replace(/\D/g, '').slice(0, 11);
+        return d
+            .replace(/^(\d{3})(\d)/, '$1.$2')
+            .replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3')
+            .replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
+    }
+
+    campoCpf.addEventListener('input', () => {
+        campoCpf.value = formatarCpf(campoCpf.value);
+    });
+    campoCpf.value = formatarCpf(campoCpf.value);
+</script>
 </body>
 </html>
