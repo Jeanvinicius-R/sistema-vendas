@@ -75,7 +75,7 @@
 
               <span
                 class="fs-4 text-success"
-                th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorTotal, 2, 2)}"
+                th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorTotal, 1, 2)}"
               >
               </span>
             </div>
@@ -111,7 +111,7 @@
                   <option
                     th:each="produto : ${produtos}"
                     th:value="${produto.id}"
-                    th:text="${produto.nome + ' - R$ ' + #numbers.formatDecimal(produto.preco, 2, 2) + ' | Estoque: ' + produto.quantidadeEmEstoque}"
+                    th:text="${produto.nome + ' - R$ ' + #numbers.formatDecimal(produto.preco, 1, 2) + ' | Estoque: ' + produto.quantidadeEmEstoque}"
                   ></option>
                 </select>
               </div>
@@ -172,7 +172,7 @@
                   <td th:text="${item.produto.nome}"></td>
 
                   <td
-                    th:text="${'R$ ' + #numbers.formatDecimal(item.precoUnitario.multiply(T(java.math.BigDecimal).valueOf(item.quantidade.longValue())), 2, 2)}"
+                    th:text="${'R$ ' + #numbers.formatDecimal(item.precoUnitario.multiply(T(java.math.BigDecimal).valueOf(item.quantidade.longValue())), 1, 2)}"
                   ></td>
 
                   <td>
@@ -198,7 +198,7 @@
                   </td>
 
                   <td
-                    th:text="${'R$ ' + #numbers.formatDecimal(item.precoUnitario.multiply(T(java.math.BigDecimal).valueOf(item.quantidade.longValue())), 2, 2)}"
+                    th:text="${'R$ ' + #numbers.formatDecimal(item.precoUnitario.multiply(T(java.math.BigDecimal).valueOf(item.quantidade.longValue())), 1, 2)}"
                   ></td>
 
                   <td>

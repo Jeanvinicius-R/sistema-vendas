@@ -195,7 +195,7 @@
                         </td>
 
                         <td
-                            th:text="${'R$ ' + #numbers.formatDecimal(item.precoUnitario, 2, 2)}">
+                            th:text="${'R$ ' + #numbers.formatDecimal(item.precoUnitario, 1, 2)}">
                         </td>
 
                         <td
@@ -203,7 +203,7 @@
                         </td>
 
                         <td
-                            th:text="${'R$ ' + #numbers.formatDecimal(item.precoUnitario.multiply(T(java.math.BigDecimal).valueOf(item.quantidade)), 2, 2)}">
+                            th:text="${'R$ ' + #numbers.formatDecimal(item.precoUnitario.multiply(T(java.math.BigDecimal).valueOf(item.quantidade)), 1, 2)}">
                         </td>
 
                     </tr>
@@ -234,7 +234,7 @@
 
                     <span
                         class="text-success"
-                        th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorTotal, 2, 2)}">
+                        th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorTotal, 1, 2)}">
                     </span>
 
                 </h3>

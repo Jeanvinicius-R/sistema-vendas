@@ -26,7 +26,11 @@
 
         <div class="mb-3">
             <label for="preco" class="form-label">Preço</label>
-            <input type="number" class="form-control" id="preco" th:field="*{preco}">
+            <div class="input-group">
+                <span class="input-group-text">R$</span>
+                <input type="number" class="form-control" id="preco" th:field="*{preco}"
+                       step="0.01" min="0.01" placeholder="0,00">
+            </div>
             <div class="text-danger" th:if="${#fields.hasErrors('preco')}" th:errors="*{preco}"></div>
         </div>
 
