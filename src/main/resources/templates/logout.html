@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sair - Sistema de Vendas</title>
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-</head>
+<head th:replace="~{fragments/layout :: head('Sair')}"></head>
 <body>
 
-<div th:replace="~{fragments/menu :: menu}"></div>
+<div th:replace="~{fragments/menu :: menu('')}"></div>
 
-<div class="container" style="max-width: 480px; margin-top: 60px;">
+<main class="container py-5">
+    <div class="card mx-auto" style="max-width: 460px;">
+        <div class="card-body p-4 text-center">
+            <h1 class="h4 fw-bold mb-2">Sair do sistema</h1>
+            <p class="text-secondary mb-4">Deseja realmente encerrar a sua sessão?</p>
 
-    <h1 class="h3 mb-3">Sair do sistema</h1>
+            <!-- th:action inclui o token CSRF exigido pelo POST /logout -->
+            <form th:action="@{/logout}" method="post" class="d-flex gap-2 justify-content-center">
+                <a th:href="@{/pedidos}" class="btn btn-outline-secondary">Voltar</a>
+                <button type="submit" class="btn btn-danger">Confirmar saída</button>
+            </form>
+        </div>
+    </div>
+</main>
 
-    <p>Deseja realmente encerrar a sessão?</p>
-
-    <!-- th:action inclui o token CSRF exigido pelo POST /logout -->
-    <form th:action="@{/logout}" method="post">
-        <button type="submit" class="btn btn-danger">Confirmar saída</button>
-        <a th:href="@{/pedidos}" class="btn btn-secondary">Voltar</a>
-    </form>
-
-</div>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
 </body>
 </html>

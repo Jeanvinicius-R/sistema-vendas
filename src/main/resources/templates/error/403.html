@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Acesso negado - Sistema de Vendas</title>
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-</head>
+<head th:replace="~{fragments/layout :: head('Acesso negado')}"></head>
 <body>
 
-<div th:replace="~{fragments/menu :: menu}"></div>
+<div th:replace="~{fragments/menu :: menu('')}"></div>
 
-<div class="container mt-5">
-    <div class="alert alert-danger">
-        <h1 class="h4">Acesso negado</h1>
-        <p class="mb-0">Seu perfil não tem permissão para acessar esta página.</p>
+<main class="container py-5">
+    <div class="card card-danger mx-auto" style="max-width: 520px;">
+        <div class="card-body p-4 text-center">
+            <p class="display-4 fw-bold text-danger mb-1">403</p>
+            <h1 class="h4 fw-bold mb-2">Acesso negado</h1>
+            <p class="text-secondary mb-4">Seu perfil não tem permissão para acessar esta página.</p>
+            <a th:href="@{/pedidos}" class="btn btn-primary">Voltar aos pedidos</a>
+        </div>
     </div>
-    <a th:href="@{/pedidos}" class="btn btn-primary">Voltar aos pedidos</a>
-</div>
+</main>
 
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
 </body>
 </html>

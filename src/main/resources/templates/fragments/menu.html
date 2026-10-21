@@ -3,38 +3,46 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 
-<!-- Menu compartilhado: independe do CSS de cada página -->
-<nav th:fragment="menu" class="sv-menu">
-    <style>
-        .sv-menu {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 20px;
-            padding: 12px 24px;
-            background-color: #212529;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-        }
-        .sv-menu a { color: #dee2e6; text-decoration: none; }
-        .sv-menu a:hover { color: #fff; }
-        .sv-menu .sv-marca { color: #fff; font-weight: bold; font-size: 16px; }
-        .sv-menu .sv-usuario { margin-left: auto; color: #adb5bd; }
-    </style>
+<!-- Menu compartilhado. "ativo" destaca o item da página atual -->
+<nav th:fragment="menu(ativo)" class="navbar navbar-expand-md navbar-dark sv-navbar sticky-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/pedidos}">
+            <span class="brand-mark">SV</span>
+            Sistema de Vendas
+        </a>
 
-    <a class="sv-marca" th:href="@{/pedidos}">Sistema de Vendas</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#menuPrincipal" aria-controls="menuPrincipal"
+                aria-expanded="false" aria-label="Alternar menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <a th:href="@{/pedidos}">Pedidos</a>
+        <div class="collapse navbar-collapse" id="menuPrincipal">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0 ms-md-3">
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${ativo == 'pedidos'} ? 'active'"
+                       th:href="@{/pedidos}">Pedidos</a>
+                </li>
+                <!-- Visíveis apenas para ADMIN -->
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:classappend="${ativo == 'produtos'} ? 'active'"
+                       th:href="@{/produtos}">Produtos</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:classappend="${ativo == 'clientes'} ? 'active'"
+                       th:href="@{/clientes}">Clientes</a>
+                </li>
+            </ul>
 
-    <!-- Visível apenas para ADMIN -->
-    <a sec:authorize="hasRole('ADMIN')" th:href="@{/produtos}">Produtos</a>
-    <a sec:authorize="hasRole('ADMIN')" th:href="@{/clientes}">Clientes</a>
-
-    <span class="sv-usuario" sec:authorize="isAuthenticated()">
-        <span sec:authentication="principal.nome">Usuário</span>
-        (<span sec:authentication="principal.role">PADRAO</span>)
-    </span>
-    <a sec:authorize="isAuthenticated()" th:href="@{/logout}">Sair</a>
+            <div class="d-flex align-items-center gap-3" sec:authorize="isAuthenticated()">
+                <span class="text-white small">
+                    <span class="fw-semibold" sec:authentication="principal.nome">Usuário</span>
+                    <span class="badge bg-light text-dark ms-1" sec:authentication="principal.role">PADRAO</span>
+                </span>
+                <a class="btn btn-sm btn-outline-light" th:href="@{/logout}">Sair</a>
+            </div>
+        </div>
+    </div>
 </nav>
 
 </body>

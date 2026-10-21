@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<!-- <head> padrão: Bootstrap local + tema da aplicação -->
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${titulo} + ' - Sistema de Vendas'">Sistema de Vendas</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/app.css}" rel="stylesheet">
+</head>
+
+<body>
+<th:block th:fragment="scripts">
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</th:block>
+</body>
+</html>

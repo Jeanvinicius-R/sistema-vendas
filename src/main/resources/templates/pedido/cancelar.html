@@ -1,86 +1,62 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Cancelar Pedido</title>
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-</head>
-
+<head th:replace="~{fragments/layout :: head('Cancelar pedido')}"></head>
 <body>
-<div th:replace="~{fragments/menu :: menu}"></div>
 
-<div class="container mt-4">
+<div th:replace="~{fragments/menu :: menu('pedidos')}"></div>
 
-    <h1>Cancelar Pedido</h1>
+<main class="container py-4">
 
-    <div class="alert alert-warning">
-
-        <p>
-            Tem certeza que deseja cancelar o pedido
-            <strong>#<span th:text="${pedido.id}"></span></strong>
-            do cliente
-            <strong th:text="${pedido.cliente.nomeCompleto}"></strong>?
-        </p>
-
-        <p>
-            Os produtos deste pedido serão devolvidos ao estoque.
-            O registro não será excluído.
-        </p>
-
+    <div class="page-header">
+        <div>
+            <h1>Cancelar pedido</h1>
+            <p class="subtitle">Confirme o cancelamento abaixo.</p>
+        </div>
     </div>
 
-    <table class="table table-bordered">
+    <div class="card card-danger form-card">
+        <div class="card-header">
+            Cancelar o pedido <strong th:text="'#' + ${pedido.id}">#1</strong>
+            do cliente <strong th:text="${pedido.cliente.nomeCompleto}"></strong>?
+        </div>
 
-        <thead>
-        <tr>
-            <th>Produto</th>
-            <th>Quantidade</th>
-        </tr>
-        </thead>
+        <div class="card-body">
+            <p class="text-secondary">
+                Os produtos deste pedido serão devolvidos ao estoque.
+                O registro não será excluído.
+            </p>
 
-        <tbody>
+            <div class="table-responsive mb-3">
+                <table class="table align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th class="text-end">Quantidade</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${pedido.itens}">
+                        <td th:text="${item.produto.nome}">Produto</td>
+                        <td class="text-end" th:text="${item.quantidade}">1</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-        <tr th:each="item : ${pedido.itens}">
+            <p class="mb-4">
+                <span class="stat-label">Valor total</span><br>
+                <span class="stat-value money"
+                      th:text="${#numbers.formatCurrency(pedido.valorTotal)}">R$ 0,00</span>
+            </p>
 
-            <td th:text="${item.produto.nome}">
-                Produto
-            </td>
+            <form th:action="@{/pedidos/cancelar/{id}(id=${pedido.id})}" method="post" class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">Confirmar cancelamento</button>
+                <a th:href="@{/pedidos}" class="btn btn-outline-secondary">Voltar</a>
+            </form>
+        </div>
+    </div>
+</main>
 
-            <td th:text="${item.quantidade}">
-                1
-            </td>
-
-        </tr>
-
-        </tbody>
-
-    </table>
-
-    <p>
-        <strong>Valor total:</strong>
-
-        <span th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorTotal, 1, 2)}">
-            R$ 0,00
-        </span>
-    </p>
-
-    <form th:action="@{/pedidos/cancelar/{id}(id=${pedido.id})}"
-          method="post">
-
-        <button type="submit"
-                class="btn btn-danger">
-            Confirmar Cancelamento
-        </button>
-
-        <a th:href="@{/pedidos}"
-           class="btn btn-secondary">
-            Voltar
-        </a>
-
-    </form>
-
-</div>
-
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
 </body>
 </html>

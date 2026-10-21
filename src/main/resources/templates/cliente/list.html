@@ -1,42 +1,59 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Listagem de Clientes</title>
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-</head>
+<head th:replace="~{fragments/layout :: head('Clientes')}"></head>
 <body>
-<div th:replace="~{fragments/menu :: menu}"></div>
-<div class="container mt-4">
-    <h1>Clientes</h1>
-    <a class="btn btn-primary mb-3" th:href="@{/clientes/novo}">Novo Cliente</a>
 
-    <table class="table table-bordered table-striped">
-        <thead class="thead-dark">
-        <tr>
-            <th>Nome</th>
-            <th>E-mail</th>
-            <th>CPF</th>
-            <th>Telefone</th>
-            <th>Cidade/UF</th>
-            <th>Ações</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="cliente : ${clientes}">
-            <td th:text="${cliente.nomeCompleto}"></td>
-            <td th:text="${cliente.email}"></td>
-            <td th:text="${cliente.cpf}"></td>
-            <td th:text="${cliente.telefone}"></td>
-            <td th:text="${cliente.endereco.cidade} + '/' + ${cliente.endereco.uf}"></td>
-            <td>
-                <a class="btn btn-sm btn-warning" th:href="@{/clientes/edit/{id}(id=${cliente.id})}">Editar</a>
-                <a class="btn btn-sm btn-danger" th:href="@{/clientes/delete/{id}(id=${cliente.id})}">Excluir</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<div th:replace="~{fragments/menu :: menu('clientes')}"></div>
+
+<main class="container py-4">
+
+    <div class="page-header">
+        <div>
+            <h1>Clientes</h1>
+            <p class="subtitle">Cadastro de clientes e endereços.</p>
+        </div>
+        <a class="btn btn-primary" th:href="@{/clientes/novo}">+ Novo cliente</a>
+    </div>
+
+    <div class="card">
+
+        <div th:if="${#lists.isEmpty(clientes)}" class="empty-state">
+            <h2>Nenhum cliente cadastrado</h2>
+            <p>Cadastre o primeiro cliente para poder criar pedidos.</p>
+            <a class="btn btn-primary" th:href="@{/clientes/novo}">Cadastrar cliente</a>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(clientes)}" class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>CPF</th>
+                    <th>Telefone</th>
+                    <th>Cidade/UF</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cliente : ${clientes}">
+                    <td class="fw-semibold" th:text="${cliente.nomeCompleto}"></td>
+                    <td th:text="${cliente.email}"></td>
+                    <td class="text-nowrap" th:text="${cliente.cpf}"></td>
+                    <td class="text-nowrap" th:text="${cliente.telefone}"></td>
+                    <td th:text="${cliente.endereco.cidade} + '/' + ${cliente.endereco.uf}"></td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-primary" th:href="@{/clientes/edit/{id}(id=${cliente.id})}">Editar</a>
+                        <a class="btn btn-sm btn-outline-danger" th:href="@{/clientes/delete/{id}(id=${cliente.id})}">Excluir</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</main>
+
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
 </body>
 </html>

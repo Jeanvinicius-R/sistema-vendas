@@ -1,0 +1,204 @@
+/* Tema do Sistema de Vendas (camada sobre o Bootstrap 5) */
+
+:root {
+    --sv-primary: #4f46e5;
+    --sv-primary-dark: #4338ca;
+    --sv-ink: #1e293b;
+    --sv-muted: #64748b;
+    --sv-border: #e2e8f0;
+    --sv-bg: #f4f6fb;
+
+    --bs-primary: #4f46e5;
+    --bs-primary-rgb: 79, 70, 229;
+    --bs-link-color: #4f46e5;
+    --bs-link-color-rgb: 79, 70, 229;
+    --bs-link-hover-color: #4338ca;
+    --bs-link-hover-color-rgb: 67, 56, 202;
+    --bs-body-bg: var(--sv-bg);
+    --bs-body-color: var(--sv-ink);
+    --bs-body-font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+    --bs-border-color: var(--sv-border);
+    --bs-border-radius: 0.6rem;
+}
+
+body { min-height: 100vh; }
+
+/* ---------- Botões ---------- */
+.btn { font-weight: 500; border-radius: 0.6rem; }
+
+.btn-primary {
+    --bs-btn-bg: #4f46e5;
+    --bs-btn-border-color: #4f46e5;
+    --bs-btn-hover-bg: #4338ca;
+    --bs-btn-hover-border-color: #4338ca;
+    --bs-btn-active-bg: #3730a3;
+    --bs-btn-active-border-color: #3730a3;
+    --bs-btn-disabled-bg: #4f46e5;
+    --bs-btn-disabled-border-color: #4f46e5;
+    --bs-btn-focus-shadow-rgb: 79, 70, 229;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: #4f46e5;
+    --bs-btn-border-color: #c7d2fe;
+    --bs-btn-hover-bg: #4f46e5;
+    --bs-btn-hover-border-color: #4f46e5;
+    --bs-btn-active-bg: #4338ca;
+    --bs-btn-active-border-color: #4338ca;
+    --bs-btn-focus-shadow-rgb: 79, 70, 229;
+}
+
+.btn-outline-danger { --bs-btn-border-color: #fecaca; }
+.btn-outline-secondary { --bs-btn-border-color: #cbd5e1; }
+
+/* ---------- Menu ---------- */
+.sv-navbar {
+    background: linear-gradient(90deg, #1e1b4b 0%, #312e81 100%);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.18);
+}
+
+.sv-navbar .navbar-brand { font-weight: 700; letter-spacing: 0.01em; }
+
+.sv-navbar .nav-link {
+    color: rgba(255, 255, 255, 0.72);
+    font-weight: 500;
+    border-radius: 0.5rem;
+    padding: 0.45rem 0.85rem;
+}
+
+.sv-navbar .nav-link:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+.sv-navbar .nav-link.active { color: #fff; background: rgba(255, 255, 255, 0.16); }
+
+.brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.55rem;
+    background: linear-gradient(135deg, #818cf8, #4f46e5);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+/* ---------- Cabeçalho de página ---------- */
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.page-header h1 { font-size: 1.65rem; font-weight: 700; margin: 0; }
+.page-header .subtitle { margin: 0.2rem 0 0; color: var(--sv-muted); }
+
+/* ---------- Cards ---------- */
+.card {
+    --bs-card-bg: #fff;
+    border: 1px solid var(--sv-border);
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.card-header {
+    background: #fff;
+    border-bottom: 1px solid var(--sv-border);
+    font-weight: 600;
+    padding: 0.9rem 1.25rem;
+    border-radius: 1rem 1rem 0 0 !important;
+}
+
+.card-body { padding: 1.25rem; }
+
+.card-danger { border-color: #fecaca; }
+.card-danger .card-header { background: #fef2f2; color: #991b1b; border-bottom-color: #fecaca; }
+
+/* ---------- Tabelas ---------- */
+.table { --bs-table-bg: transparent; }
+
+.table thead th {
+    background: #f8fafc;
+    color: var(--sv-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--sv-border);
+    white-space: nowrap;
+}
+
+.table > :not(caption) > * > * { padding: 0.85rem 1.1rem; }
+.table-hover > tbody > tr:hover > * { --bs-table-hover-bg: #f5f7ff; }
+.table tbody tr:last-child > * { border-bottom: 0; }
+
+.money { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ---------- Formulários ---------- */
+.form-label { font-weight: 600; font-size: 0.875rem; margin-bottom: 0.35rem; }
+
+.form-control,
+.form-select,
+.input-group-text { border-color: #cbd5e1; }
+
+.form-control,
+.form-select { background-color: #fff; }
+
+.input-group-text { background: #f8fafc; color: var(--sv-muted); font-weight: 600; }
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #818cf8;
+    box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.15);
+}
+
+.form-section-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--sv-muted);
+    margin-bottom: 1rem;
+}
+
+.form-card { max-width: 760px; }
+
+/* ---------- Estados vazios e resumo ---------- */
+.empty-state { padding: 3rem 1.5rem; text-align: center; color: var(--sv-muted); }
+.empty-state h2 { font-size: 1.15rem; color: var(--sv-ink); font-weight: 600; }
+
+.stat-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--sv-muted);
+}
+
+.stat-value { font-size: 1.05rem; font-weight: 600; }
+.stat-total { font-size: 1.6rem; font-weight: 700; color: #15803d; }
+
+.badge { font-weight: 600; letter-spacing: 0.02em; }
+
+/* ---------- Login / logout ---------- */
+.auth-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #1e1b4b 0%, #4f46e5 60%, #818cf8 100%);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 410px;
+    background: #fff;
+    border-radius: 1.25rem;
+    padding: 2.25rem 2rem;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.35);
+}
+
+.auth-card .brand-mark { width: 3rem; height: 3rem; font-size: 1.05rem; border-radius: 0.85rem; }

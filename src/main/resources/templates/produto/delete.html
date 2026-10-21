@@ -1,43 +1,46 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Excluir Produto</title>
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-</head>
+<head th:replace="~{fragments/layout :: head('Excluir produto')}"></head>
 <body>
-<div th:replace="~{fragments/menu :: menu}"></div>
-<div class="container mt-4">
-    <h1>Excluir Produto</h1>
 
-    <div class="alert alert-danger">
-        <p>Tem certeza que deseja excluir o produto <strong th:text="${produto.nome}"></strong>?</p>
+<div th:replace="~{fragments/menu :: menu('produtos')}"></div>
+
+<main class="container py-4">
+
+    <div class="page-header">
+        <div>
+            <h1>Excluir produto</h1>
+            <p class="subtitle">Esta ação não pode ser desfeita.</p>
+        </div>
     </div>
 
-    <table class="table table-bordered">
-        <tr>
-            <th>Nome</th>
-            <td th:text="${produto.nome}"></td>
-        </tr>
-        <tr>
-            <th>Descrição</th>
-            <td th:text="${produto.descricao}"></td>
-        </tr>
-        <tr>
-            <th>Preço</th>
-            <td th:text="${#numbers.formatCurrency(produto.preco)}"></td>
-        </tr>
-        <tr>
-            <th>Quantidade em Estoque</th>
-            <td th:text="${produto.quantidadeEmEstoque}"></td>
-        </tr>        
-    </table>
+    <div class="card card-danger form-card">
+        <div class="card-header">
+            Tem certeza que deseja excluir <strong th:text="${produto.nome}"></strong>?
+        </div>
+        <div class="card-body">
+            <dl class="row mb-4">
+                <dt class="col-sm-4 text-secondary fw-semibold">Nome</dt>
+                <dd class="col-sm-8" th:text="${produto.nome}"></dd>
 
-    <form th:action="@{/produtos/delete/{id}(id=${produto.id})}" method="post">
-        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
-        <a th:href="@{/produtos}" class="btn btn-secondary">Cancelar</a>
-    </form>
-</div>
-<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+                <dt class="col-sm-4 text-secondary fw-semibold">Descrição</dt>
+                <dd class="col-sm-8" th:text="${produto.descricao}"></dd>
+
+                <dt class="col-sm-4 text-secondary fw-semibold">Preço</dt>
+                <dd class="col-sm-8 money" th:text="${#numbers.formatCurrency(produto.preco)}"></dd>
+
+                <dt class="col-sm-4 text-secondary fw-semibold">Estoque</dt>
+                <dd class="col-sm-8 mb-0" th:text="${produto.quantidadeEmEstoque}"></dd>
+            </dl>
+
+            <form th:action="@{/produtos/delete/{id}(id=${produto.id})}" method="post" class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">Confirmar exclusão</button>
+                <a th:href="@{/produtos}" class="btn btn-outline-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</main>
+
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
 </body>
 </html>
