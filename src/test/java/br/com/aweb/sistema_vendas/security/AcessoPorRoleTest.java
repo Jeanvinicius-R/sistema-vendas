@@ -1,13 +1,17 @@
 package br.com.aweb.sistema_vendas.security;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,12 +19,14 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import br.com.aweb.sistema_vendas.model.ResumoVendas;
 import br.com.aweb.sistema_vendas.model.Usuario;
 import br.com.aweb.sistema_vendas.model.UsuarioRole;
 import br.com.aweb.sistema_vendas.repository.ClienteRepository;
 import br.com.aweb.sistema_vendas.repository.ProdutoRepository;
 import br.com.aweb.sistema_vendas.service.ClienteService;
 import br.com.aweb.sistema_vendas.service.PedidoService;
+import br.com.aweb.sistema_vendas.service.RelatorioPedidoService;
 import br.com.aweb.sistema_vendas.service.ProdutoService;
 import br.com.aweb.sistema_vendas.service.UsuarioService;
 
@@ -34,9 +40,54 @@ class AcessoPorRoleTest {
     @MockitoBean ProdutoService produtoService;
     @MockitoBean ClienteService clienteService;
     @MockitoBean PedidoService pedidoService;
+    @MockitoBean RelatorioPedidoService relatorioService;
     @MockitoBean ClienteRepository clienteRepository;
     @MockitoBean ProdutoRepository produtoRepository;
     @MockitoBean UsuarioService usuarioService;
+
+    @BeforeEach
+    void prepararMocks() {
+        given(relatorioService.resumir(any())).willReturn(ResumoVendas.vazio());
+        given(relatorioService.gerarCsv(any())).willReturn("﻿Pedido;Data\r\n");
+    }
+
+    @Test
+    void relatorioEstaDisponivelParaAdminEPadrao() throws Exception {
+        mvc.perform(get("/pedidos/relatorio").with(user(usuario(UsuarioRole.ADMIN))))
+                .andExpect(status().isOk());
+        mvc.perform(get("/pedidos/relatorio").with(user(usuario(UsuarioRole.PADRAO))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void relatorioExigeLoginEExportaCsv() throws Exception {
+        mvc.perform(get("/pedidos/relatorio"))
+                .andExpect(status().is3xxRedirection());
+        mvc.perform(get("/pedidos/relatorio/csv"))
+                .andExpect(status().is3xxRedirection());
+
+        mvc.perform(get("/pedidos/relatorio/csv").with(user(usuario(UsuarioRole.PADRAO))))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith("text/csv"))
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers
+                        .header().string("Content-Disposition",
+                                org.hamcrest.Matchers.containsString("relatorio-pedidos-")));
+    }
+
+    @Test
+    void relatorioComPeriodoInvertidoMostraErro() throws Exception {
+        mvc.perform(get("/pedidos/relatorio?inicio=2026-10-10&fim=2026-10-01")
+                        .with(user(usuario(UsuarioRole.ADMIN))))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        org.hamcrest.Matchers.containsString("posterior")));
+    }
+
+    @Test
+    void logoETemaSaoPublicos() throws Exception {
+        mvc.perform(get("/img/logo.svg")).andExpect(status().isOk());
+        mvc.perform(get("/js/theme.js")).andExpect(status().isOk());
+    }
 
     private Usuario usuario(UsuarioRole role) {
         return new Usuario("Teste", "teste@vendas.com", "hash", role);

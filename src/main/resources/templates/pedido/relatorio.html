@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Relatório de pedidos')}"></head>
+<body>
+
+<div th:replace="~{fragments/menu :: menu('relatorio')}"></div>
+
+<main class="container py-4">
+
+    <div class="page-header">
+        <div>
+            <h1>Relatório de pedidos</h1>
+            <p class="subtitle">Filtre por período, status ou cliente e exporte o resultado.</p>
+        </div>
+        <a th:href="@{/pedidos}" class="btn btn-outline-secondary no-print">Voltar</a>
+    </div>
+
+    <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+
+    <!-- Filtros -->
+    <div class="card mb-4 no-print">
+        <div class="card-body">
+            <form th:action="@{/pedidos/relatorio}" method="get" class="row g-3 align-items-end">
+
+                <div class="col-md-3 col-6">
+                    <label for="inicio" class="form-label">Data inicial</label>
+                    <input type="date" id="inicio" name="inicio" class="form-control" th:value="${inicio}">
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <label for="fim" class="form-label">Data final</label>
+                    <input type="date" id="fim" name="fim" class="form-control" th:value="${fim}">
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <label for="status" class="form-label">Status</label>
+                    <select id="status" name="status" class="form-select">
+                        <option value="">Todos</option>
+                        <option th:each="s : ${statusLista}" th:value="${s}" th:text="${s}"
+                                th:selected="${status == s}">ATIVO</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <label for="clienteId" class="form-label">Cliente</label>
+                    <select id="clienteId" name="clienteId" class="form-select">
+                        <option value="">Todos</option>
+                        <option th:each="c : ${clientes}" th:value="${c.id}" th:text="${c.nomeCompleto}"
+                                th:selected="${clienteId != null and clienteId == c.id}">Cliente</option>
+                    </select>
+                </div>
+
+                <div class="col-12 d-flex flex-wrap gap-2">
+                    <button type="submit" class="btn btn-primary">Gerar relatório</button>
+                    <a th:href="@{/pedidos/relatorio}" class="btn btn-outline-secondary">Limpar filtros</a>
+
+                    <div class="ms-md-auto d-flex flex-wrap gap-2">
+                        <a th:href="@{/pedidos/relatorio/csv(inicio=${inicio},fim=${fim},status=${status},clienteId=${clienteId})}"
+                           class="btn btn-outline-primary">Exportar CSV</a>
+                        <button type="button" class="btn btn-outline-primary" onclick="window.print()">
+                            Imprimir / Salvar PDF
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cabeçalho que aparece só na impressão -->
+    <div class="so-impressao mb-3">
+        <h2 class="h5 mb-1">Sistema de Vendas - Relatório de pedidos</h2>
+        <div class="small">
+            Gerado em <span th:text="${#temporals.format(geradoEm, 'dd/MM/yyyy HH:mm')}"></span>
+            <span th:if="${inicio != null}"> | De <span th:text="${#temporals.format(inicio, 'dd/MM/yyyy')}"></span></span>
+            <span th:if="${fim != null}"> | Até <span th:text="${#temporals.format(fim, 'dd/MM/yyyy')}"></span></span>
+            <span th:if="${status != null}"> | Status: <span th:text="${status}"></span></span>
+        </div>
+    </div>
+
+    <!-- Totais -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3 col-6">
+            <div class="card kpi">
+                <div class="kpi-label">Total de vendas</div>
+                <div class="kpi-value valor-total" th:text="${#numbers.formatCurrency(resumo.totalVendas)}">R$ 0,00</div>
+                <div class="kpi-sub">Pedidos ativos</div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6">
+            <div class="card kpi kpi-accent">
+                <div class="kpi-label">Pedidos realizados</div>
+                <div class="kpi-value" th:text="${resumo.pedidosAtivos}">0</div>
+                <div class="kpi-sub"><span th:text="${resumo.itensVendidos}">0</span> itens vendidos</div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6">
+            <div class="card kpi">
+                <div class="kpi-label">Ticket médio</div>
+                <div class="kpi-value" th:text="${#numbers.formatCurrency(resumo.ticketMedio)}">R$ 0,00</div>
+                <div class="kpi-sub">Por pedido ativo</div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6">
+            <div class="card kpi kpi-danger">
+                <div class="kpi-label">Cancelados</div>
+                <div class="kpi-value" th:text="${resumo.pedidosCancelados}">0</div>
+                <div class="kpi-sub">
+                    <span th:text="${#numbers.formatCurrency(resumo.valorCancelado)}">R$ 0,00</span>, não somado
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pedidos -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Pedidos do relatório</span>
+            <span class="badge rounded-pill bg-secondary-subtle text-secondary-emphasis"
+                  th:text="${#lists.size(pedidos)} + ' registro(s)'">0 registro(s)</span>
+        </div>
+
+        <div th:if="${#lists.isEmpty(pedidos)}" class="empty-state">
+            <h2>Nenhum pedido encontrado</h2>
+            <p class="mb-0">Ajuste os filtros para ampliar a busca.</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(pedidos)}" class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                <tr>
+                    <th>Nº</th>
+                    <th>Data</th>
+                    <th>Cliente</th>
+                    <th>Produtos</th>
+                    <th>Status</th>
+                    <th class="text-end">Valor</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="p : ${pedidos}">
+                    <td class="fw-semibold">
+                        <a th:href="@{/pedidos/detalhes/{id}(id=${p.id})}" th:text="'#' + ${p.id}">#1</a>
+                    </td>
+                    <td class="text-nowrap" th:text="${p.dataPedidoFormatada}">20/09/2026</td>
+                    <td th:text="${p.cliente.nomeCompleto}">Cliente</td>
+                    <td class="small">
+                        <span th:each="i, st : ${p.itens}"
+                              th:text="${i.produto.nome + ' x' + i.quantidade + (st.last ? '' : ', ')}"></span>
+                        <span th:if="${#lists.isEmpty(p.itens)}" class="text-muted">sem itens</span>
+                    </td>
+                    <td>
+                        <span th:if="${p.status.name() == 'ATIVO'}"
+                              class="badge rounded-pill bg-success-subtle text-success-emphasis">ATIVO</span>
+                        <span th:if="${p.status.name() == 'CANCELADO'}"
+                              class="badge rounded-pill bg-danger-subtle text-danger-emphasis">CANCELADO</span>
+                    </td>
+                    <td class="text-end money fw-semibold"
+                        th:classappend="${p.status.name() == 'CANCELADO'} ? 'text-decoration-line-through text-muted'"
+                        th:text="${#numbers.formatCurrency(p.valorTotal)}">R$ 0,00</td>
+                </tr>
+                </tbody>
+
+                <tfoot>
+                <tr>
+                    <td colspan="5" class="text-end">Total de vendas (pedidos ativos)</td>
+                    <td class="text-end money" th:text="${#numbers.formatCurrency(resumo.totalVendas)}">R$ 0,00</td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</main>
+
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

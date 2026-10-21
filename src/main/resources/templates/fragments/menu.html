@@ -7,7 +7,7 @@
 <nav th:fragment="menu(ativo)" class="navbar navbar-expand-md navbar-dark sv-navbar sticky-top">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/pedidos}">
-            <span class="brand-mark">SV</span>
+            <img class="brand-logo" th:src="@{/img/logo.svg}" alt="">
             Sistema de Vendas
         </a>
 
@@ -23,6 +23,10 @@
                     <a class="nav-link" th:classappend="${ativo == 'pedidos'} ? 'active'"
                        th:href="@{/pedidos}">Pedidos</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${ativo == 'relatorio'} ? 'active'"
+                       th:href="@{/pedidos/relatorio}">Relatório</a>
+                </li>
                 <!-- Visíveis apenas para ADMIN -->
                 <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                     <a class="nav-link" th:classappend="${ativo == 'produtos'} ? 'active'"
@@ -34,12 +38,15 @@
                 </li>
             </ul>
 
-            <div class="d-flex align-items-center gap-3" sec:authorize="isAuthenticated()">
-                <span class="text-white small">
+            <div class="d-flex align-items-center gap-3">
+                <button th:replace="~{fragments/layout :: botaoTema('btn-outline-light btn-sm')}"></button>
+
+                <span class="text-white small" sec:authorize="isAuthenticated()">
                     <span class="fw-semibold" sec:authentication="principal.nome">Usuário</span>
                     <span class="badge bg-light text-dark ms-1" sec:authentication="principal.role">PADRAO</span>
                 </span>
-                <a class="btn btn-sm btn-outline-light" th:href="@{/logout}">Sair</a>
+                <a class="btn btn-sm btn-outline-light" sec:authorize="isAuthenticated()"
+                   th:href="@{/logout}">Sair</a>
             </div>
         </div>
     </div>

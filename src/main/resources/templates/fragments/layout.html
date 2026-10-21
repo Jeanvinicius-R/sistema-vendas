@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
-<!-- <head> padrão: Bootstrap local + tema da aplicação -->
+<!-- <head> padrão: tema (claro/escuro) + Bootstrap local + estilos da aplicação -->
 <head th:fragment="head(titulo)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="${titulo} + ' - Sistema de Vendas'">Sistema de Vendas</title>
+    <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
+
+    <!-- Aplica o tema salvo antes da primeira pintura (evita piscar) -->
+    <script th:src="@{/js/theme.js}"></script>
+
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/app.css}" rel="stylesheet">
 </head>
@@ -14,5 +19,18 @@
 <th:block th:fragment="scripts">
     <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </th:block>
+
+<!-- Botão de alternar tema: o clique é tratado em /js/theme.js -->
+<button th:fragment="botaoTema(classes)" type="button" data-tema-toggle
+        class="btn theme-toggle" th:classappend="${classes}"
+        title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">
+    <svg class="icone-lua" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+    </svg>
+    <svg class="icone-sol" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="4.5"/>
+        <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/>
+    </svg>
+</button>
 </body>
 </html>

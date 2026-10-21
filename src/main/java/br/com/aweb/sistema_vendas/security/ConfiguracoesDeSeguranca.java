@@ -18,7 +18,7 @@ public class ConfiguracoesDeSeguranca {
         http
             // Regras da mais específica para a mais genérica: vale a primeira que casar
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/error", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/login", "/error", "/css/**", "/js/**", "/img/**").permitAll()
                 .requestMatchers("/produtos/**", "/clientes/**").hasRole("ADMIN")
                 .requestMatchers("/pedidos/**").hasAnyRole("ADMIN", "PADRAO")
                 .anyRequest().authenticated()

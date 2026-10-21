@@ -4,10 +4,13 @@
 <body>
 
 <div class="auth-wrap">
+
+    <button th:replace="~{fragments/layout :: botaoTema('btn-outline-light theme-toggle-flutuante')}"></button>
+
     <div class="auth-card">
 
         <div class="text-center mb-4">
-            <span class="brand-mark mb-3">SV</span>
+            <img class="brand-logo mb-3" th:src="@{/img/logo.svg}" alt="Sistema de Vendas">
             <h1 class="h4 fw-bold mb-1">Sistema de Vendas</h1>
             <p class="text-secondary mb-0">Entre com sua conta para continuar</p>
         </div>

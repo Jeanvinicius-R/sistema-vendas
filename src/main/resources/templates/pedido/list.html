@@ -12,7 +12,40 @@
             <h1>Pedidos</h1>
             <p class="subtitle">Acompanhe e gerencie as vendas.</p>
         </div>
-        <a th:href="@{/pedidos/novo}" class="btn btn-primary">+ Novo pedido</a>
+        <div class="d-flex flex-wrap gap-2">
+            <a th:href="@{/pedidos/relatorio}" class="btn btn-outline-secondary">Relatório</a>
+            <a th:href="@{/pedidos/novo}" class="btn btn-primary">+ Novo pedido</a>
+        </div>
+    </div>
+
+    <!-- Totais de vendas (somente pedidos ATIVO) -->
+    <div class="row g-3 mb-4" th:if="${resumo != null}">
+        <div class="col-md-4">
+            <div class="card kpi">
+                <div class="kpi-label">Total de vendas</div>
+                <div class="kpi-value valor-total" th:text="${#numbers.formatCurrency(resumo.totalVendas)}">R$ 0,00</div>
+                <div class="kpi-sub">Soma dos pedidos ativos</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card kpi kpi-accent">
+                <div class="kpi-label">Pedidos realizados</div>
+                <div class="kpi-value" th:text="${resumo.pedidosAtivos}">0</div>
+                <div class="kpi-sub">
+                    Ticket médio
+                    <strong th:text="${#numbers.formatCurrency(resumo.ticketMedio)}">R$ 0,00</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card kpi kpi-danger">
+                <div class="kpi-label">Cancelados</div>
+                <div class="kpi-value" th:text="${resumo.pedidosCancelados}">0</div>
+                <div class="kpi-sub">Não entram no total de vendas</div>
+            </div>
+        </div>
     </div>
 
     <!-- Mensagens -->
