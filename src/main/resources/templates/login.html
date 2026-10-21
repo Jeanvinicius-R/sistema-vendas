@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - Sistema de Vendas</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container" style="max-width: 420px; margin-top: 80px;">
+
+    <h1 class="h3 mb-4 text-center">Sistema de Vendas</h1>
+
+    <div class="alert alert-danger" th:if="${param.error}">
+        E-mail ou senha inválidos.
+    </div>
+
+    <div class="alert alert-success" th:if="${param.logout}">
+        Você saiu do sistema com sucesso.
+    </div>
+
+    <form th:action="@{/login}" method="post" class="card card-body">
+        <div class="mb-3">
+            <label for="email" class="form-label">E-mail</label>
+            <input type="email" id="email" name="email" class="form-control" required autofocus>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Senha</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Entrar</button>
+    </form>
+
+</div>
+</body>
+</html>

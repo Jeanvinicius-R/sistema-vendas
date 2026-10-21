@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sair - Sistema de Vendas</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragments/menu :: menu}"></div>
+
+<div class="container" style="max-width: 480px; margin-top: 60px;">
+
+    <h1 class="h3 mb-3">Sair do sistema</h1>
+
+    <p>Deseja realmente encerrar a sessão?</p>
+
+    <!-- th:action inclui o token CSRF exigido pelo POST /logout -->
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="btn btn-danger">Confirmar saída</button>
+        <a th:href="@{/pedidos}" class="btn btn-secondary">Voltar</a>
+    </form>
+
+</div>
+</body>
+</html>

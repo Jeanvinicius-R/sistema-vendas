@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<!-- Menu compartilhado: independe do CSS de cada página -->
+<nav th:fragment="menu" class="sv-menu">
+    <style>
+        .sv-menu {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 20px;
+            padding: 12px 24px;
+            background-color: #212529;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+        .sv-menu a { color: #dee2e6; text-decoration: none; }
+        .sv-menu a:hover { color: #fff; }
+        .sv-menu .sv-marca { color: #fff; font-weight: bold; font-size: 16px; }
+        .sv-menu .sv-usuario { margin-left: auto; color: #adb5bd; }
+    </style>
+
+    <a class="sv-marca" th:href="@{/pedidos}">Sistema de Vendas</a>
+
+    <a th:href="@{/pedidos}">Pedidos</a>
+
+    <!-- Visível apenas para ADMIN -->
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/produtos}">Produtos</a>
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/clientes}">Clientes</a>
+
+    <span class="sv-usuario" sec:authorize="isAuthenticated()">
+        <span sec:authentication="principal.nome">Usuário</span>
+        (<span sec:authentication="principal.role">PADRAO</span>)
+    </span>
+    <a sec:authorize="isAuthenticated()" th:href="@{/logout}">Sair</a>
+</nav>
+
+</body>
+</html>
